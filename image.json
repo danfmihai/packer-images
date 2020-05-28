@@ -1,9 +1,28 @@
 {
     "builders": [{
         "type": "amazon-ebs",
+        "instance_type": "t2.micro",
         "region": "us-east-1",
         "source_ami": "ami-0323c3dd2da7fb37d",
         "ssh_username": "ec2-user",
         "ami_name": "misu-{{timestamp}}"
-    }]
+    }],
+    "provisioners": [{
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+                "sudo yum install httpd -y",
+                "sudo yum install -y php",
+                "sudo touch /tmp/testfile",
+                "sudo useradd bob"
+
+            ]
+        },
+
+        {
+            "type": "file",
+            "source": "/etc/passwd",
+            "destination": "/tmp/user_list"
+        }
+    ]
 }
